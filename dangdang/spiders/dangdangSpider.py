@@ -8,15 +8,13 @@ class DangdangspiderSpider(scrapy.Spider):
     allowed_domains = ["dangdang.com"]
     start_urls = ["https://category.dangdang.com/pg1-cp01.01.02.00.00.00.html"]
 
-
     def parse(self, response):
         mytree = etree.HTML(response.text)
         book_list = mytree.xpath('//ul[@class="bigimg"]/li')
 
         for book in book_list:
 
-            
-            name = book.xpath('.//a[@title]/@title')
+            name = book.xpath(".//a[@title]/@title")
             name = name[0].strip() if name else "N/A"
 
             price = book.xpath('.//span[@class="search_now_price"]/text()')
@@ -26,7 +24,9 @@ class DangdangspiderSpider(scrapy.Spider):
             press = press[-1].strip() if press else "N/A"
 
             content = book.xpath('.//p[@class="detail"]/text()')
-            content = ' '.join([d.strip() for d in content]).strip() if content else "N/A"
+            content = (
+                " ".join([d.strip() for d in content]).strip() if content else "N/A"
+            )
 
             item = DangdangItem()
             item["name"] = name
